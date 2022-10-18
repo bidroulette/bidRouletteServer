@@ -9,6 +9,16 @@ function stopwatch(setTime) {
 	}
 };
 
+function createTime(payload){
+	let parsedStartDate = new Date(payload.startTime);
+	let parsedEndDate = new Date(payload.endTime);
+	let startTime = parsedStartDate.getTime();
+	let endTime = parsedEndDate.getTime();
+	let stopwatchMilliseconds = endTime - startTime;
+	let stopwatchSeconds = stopwatchMilliseconds / 1000;
+	return stopwatchSeconds
+}
 module.exports = {
-  stopwatch
+  stopwatch,
+  createTime
 };
