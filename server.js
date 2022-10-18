@@ -24,7 +24,8 @@ const messages = socketServer.of('messages');
 messages.on('connection', (socket) => {
   console.log('Client Connected', socket.id);
 
-  socket.on('itemForAuction', (payload) => {
-    console.log(payload)
-  })
+    socket.on('itemForAuction', (payload) => {
+        console.log(payload)
+        socket.broadcast.emit('itemReady', (payload))
+    })
 })
