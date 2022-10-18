@@ -11,10 +11,10 @@ app.use(cors());
 
 const server = http.createServer(app);
 const socketServer = io(server, {
-    cors: {
-        origin: "http://localhost:3001",
-        methods: ["GET", "POST"],
-    }
+  cors: {
+    origin: "http://localhost:3001",
+    methods: ["GET", "POST"],
+  }
 })
 
 server.listen(PORT);
@@ -22,11 +22,10 @@ server.listen(PORT);
 const messages = socketServer.of('messages');
 
 messages.on('connection', (socket) => {
-    console.log('Client Connected', socket.id);
+  console.log('Client Connected', socket.id);
 
     socket.on('itemForAuction', (payload) => {
         console.log(payload)
         socket.broadcast.emit('itemReady', (payload))
     })
 })
-
