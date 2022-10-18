@@ -26,6 +26,7 @@ messages.on('connection', (socket) => {
 
     socket.on('itemForAuction', (payload) => {
         console.log(payload)
+        socket.broadcast.emit('itemReady', (payload))
     })
 })
 
