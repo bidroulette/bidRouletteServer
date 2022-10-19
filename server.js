@@ -28,9 +28,8 @@ messages.on('connection', (socket) => {
   console.log('Client Connected', socket.id);
 
     socket.on('itemForAuction', (payload) => {
-      console.log(payload)
-        Stopwatch.start();
-
+      console.log(payload);
+      
         socket.broadcast.emit('itemReady', (payload))
     })
 })
