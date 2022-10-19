@@ -2,7 +2,8 @@ name: Deploy The Server
 on:
   push:
     branches:
-    - main
+    - main,
+    -elb
 
 jobs:
   build:
