@@ -12,6 +12,7 @@ let currentHighestBid = 0;
 const stopwatch1 = new Stopwatch();
 
 app.use(cors());
+app.get('/', (req, res, next) => {res.send('This route works.')})
 
 const server = http.createServer(app);
 const socketServer = io(server, {
@@ -35,6 +36,7 @@ messages.on('connection', (socket) => {
 
     socket.on('itemForAuction', (payload) => {
       console.log(payload);
+
       stopwatch1.seconds = payload.auctionTime;
        socket.broadcast.emit('itemReady', (payload))
        stopwatch1.start(() => {
@@ -52,5 +54,6 @@ messages.on('connection', (socket) => {
       } else if (payload.userBid < currentHighestBid){
         console.log('There is a higher bid')
       }
+
     })
 })
