@@ -7,7 +7,9 @@ const chance = new Chance();
 const socket = io.connect("Bidroulette-env.eba-8jup62nc.us-west-2.elasticbeanstalk.com")
 
 const startTime = new Date();
-const auctionTime = 300000;
+
+const auctionTime =  10;
+
 
 socket.emit('itemForAuction', {
     userId: 'Cognito id',
@@ -18,3 +20,17 @@ socket.emit('itemForAuction', {
     auctionTime: auctionTime,
     intialBid: 'dollar amount',
 })
+
+let intialBid = 5;
+
+setInterval(() => {
+    intialBid += 2;
+        socket.emit('bid', {
+            userBid: intialBid,
+            userId: 'test'
+        })
+    }, 7000)
+
+    socket.on('endAuction', (payload) => {
+        console.log(payload);
+    })

@@ -12,3 +12,16 @@ const endTime = new Date(startTime.getTime() + 300000)
 socket.on('itemReady', (payload) => {
     console.log(payload)
 })
+socket.on('endAuction', (payload) => {
+    console.log(payload);
+})
+
+let intialBid = 5;
+
+setInterval(() => {
+    intialBid += 5;
+        socket.emit('bid', {
+            userBid: intialBid,
+            userId: 'test'
+        })
+    }, 9000)
