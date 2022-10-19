@@ -21,7 +21,7 @@ class Stopwatch {
       console.log(`Time remaining: ${this.seconds}   Auction Status: ${this.status}`);
    }
 
-   start() {
+   start(payload) {
       console.log(`Checking auction status before Status: ${this.status}`);
       this.status = true;
       this.countTime = setInterval(this.decreaseTime.bind(this), 1000);

@@ -6,7 +6,7 @@ const cors = require('cors');
 const http = require('http');
 const io = require('socket.io');
 const PORT = process.env.PORT || 3002;
-const { stopwatch, createTime } = require('../modules/stopwatch/stopwatch.js')
+const Stopwatch = require('../modules/Stopwatch/index.js');
 
 app.use(cors());
 
@@ -26,8 +26,9 @@ messages.on('connection', (socket) => {
   console.log('Client Connected', socket.id);
 
     socket.on('itemForAuction', (payload) => {
-        console.log(payload)
-        stopwatch(createTime(payload))
+      const stpwtch1 = new Stopwatch();  
+      console.log(payload)
+        stpwtch1.start(payload);
         socket.broadcast.emit('itemReady', (payload))
     })
 })
