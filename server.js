@@ -29,16 +29,15 @@ const messages = socketServer.of('messages');
 
 messages.on('connection', (socket) => {
   console.log('Client Connected', socket.id);
-  const onEnd = () => {
-    socket.broadcast.emit('endAuction', {highestBid: currentHighestBid})
-  }
 
     socket.on('itemForAuction', (payload) => {
       console.log(payload);
+      console.log(currentHighestBid)
       stopwatch1.seconds = payload.auctionTime;
        socket.broadcast.emit('itemReady', (payload))
        stopwatch1.start(() => {
         messages.emit('endAuction', {highestBid: currentHighestBid})
+        currentHighestBid = 0;
       });
         
     })
