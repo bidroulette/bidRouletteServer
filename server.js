@@ -45,7 +45,6 @@ messages.on('connection', (socket) => {
       if(stopwatch1.status && payload.userBid > currentHighestBid){
         stopwatch1.addTime(payload.userBid, payload.userId);
         currentHighestBid = payload.userBid;
-        console.log(currentHighestBid)
       } else if (!stopwatch1.status){
         console.log('auction over')
       } else if (payload.userBid < currentHighestBid){

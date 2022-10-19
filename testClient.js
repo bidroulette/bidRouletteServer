@@ -19,15 +19,25 @@ socket.emit('itemForAuction', {
     intialBid: 'dollar amount',
 })
 
-let intialBid = 5;
 
-setInterval(() => {
+let intialBid = 5;
+let iterationNumber = 0
+
+let checkInterval = () => {
+    if (iterationNumber > 1){
+        clearInterval(interval)
+    }
+}
+
+let  interval = setInterval(() => {
     intialBid += 2;
+    iterationNumber++;
         socket.emit('bid', {
             userBid: intialBid,
             userId: 'test'
         })
-    }, 7000)
+        checkInterval();
+    }, 3000)
 
     socket.on('endAuction', (payload) => {
         console.log(payload);
