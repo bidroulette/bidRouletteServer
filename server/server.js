@@ -26,9 +26,8 @@ messages.on('connection', (socket) => {
   console.log('Client Connected', socket.id);
 
     socket.on('itemForAuction', (payload) => {
-      const stpwtch1 = new Stopwatch();  
       console.log(payload)
-        stpwtch1.start(payload);
+        Stopwatch.start();
         socket.broadcast.emit('itemReady', (payload))
     })
 })

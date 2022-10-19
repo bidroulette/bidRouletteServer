@@ -1,7 +1,7 @@
 'use strict';
 
 class Stopwatch {
-   constructor(stopwatchName) {
+   constructor() {
       this.status = false;
       this.seconds = 10; // For testing purposes this is set to 10. Set this to 30 and delete this comment when site goes live!
       this.intervalId = undefined;
@@ -21,7 +21,7 @@ class Stopwatch {
       console.log(`Time remaining: ${this.seconds}   Auction Status: ${this.status}`);
    }
 
-   start(payload) {
+   start() {
       console.log(`Checking auction status before Status: ${this.status}`);
       this.status = true;
       this.countTime = setInterval(this.decreaseTime.bind(this), 1000);
