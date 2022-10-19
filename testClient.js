@@ -4,7 +4,7 @@ const io = require('socket.io-client');
 const Chance = require('chance');
 const chance = new Chance();
 
-const socket = io.connect("http://localhost:3002/messages")
+const socket = io.connect("Bidroulette-env.eba-8jup62nc.us-west-2.elasticbeanstalk.com")
 
 const startTime = new Date();
 const auctionTime = 300000;

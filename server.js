@@ -11,6 +11,7 @@ const Stopwatch = require('./modules/Stopwatch/index.js');
 
 
 app.use(cors());
+app.get('/', (req, res, next) => {res.send('This route works.')})
 
 const server = http.createServer(app);
 const socketServer = io(server, {
@@ -31,5 +32,14 @@ messages.on('connection', (socket) => {
       console.log(payload);
       
         socket.broadcast.emit('itemReady', (payload))
+        socket.emit('endAuction', {
+          userId: 'Cognito id',
+          itemId: chance.guid(),
+          item:'test item',
+          itemDescription: 'Test item description',
+          startTime: startTime,
+          auctionTime: auctionTime,
+          intialBid: 'dollar amount',
+      })
     })
 })
