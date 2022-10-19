@@ -1,11 +1,13 @@
 // Libraries here
 
-const newFunc = require('./modules/stopwatch/stopwatch.js');
-
+const Stopwatch = require('./modules/stopwatch/Stopwatch/index.js');
+const stpwtch = new Stopwatch();
 // Globals here
 
-let setTime = 10;
+let userBidAmount = 10;
+let ususerNameOrId = 'User';
 
-// Functions here
+// Functions here 
 
-newFunc.stopwatch(setTime)
+stpwtch.start();
+setTimeout(() => stpwtch.addTime(userBidAmount, ususerNameOrId), 5000)
