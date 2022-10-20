@@ -16,7 +16,7 @@ socket.emit('itemForAuction', {
     itemDescription: 'Test item description',
     startTime: startTime,
     auctionTime: auctionTime,
-    currentBid: 'dollar amount',
+    intialBid: 'dollar amount',
     userId: 'test'
 })
 
