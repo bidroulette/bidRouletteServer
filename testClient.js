@@ -36,8 +36,9 @@ let  interval = setInterval(() => {
             userBid: intialBid,
             userId: 'test'
         })
+        socket.emit('leave-room', {})
         checkInterval();
-    }, 3000)
+    }, 10000)
 
     socket.on('endAuction', (payload) => {
         console.log(payload);

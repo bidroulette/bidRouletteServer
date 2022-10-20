@@ -10,6 +10,9 @@ const startTime = new Date();
 const endTime = new Date(startTime.getTime() + 300000)
 
 socket.on('itemReady', (payload) => {
+    socket.emit('joinRoom', {
+        itemId: payload.itemId,
+    })
     console.log(payload)
 })
 socket.on('endAuction', (payload) => {
@@ -33,4 +36,4 @@ let interval = setInterval(() => {
             userId: 'test'
         })
         checkInterval();
-    }, 9000)
+    }, 10000)

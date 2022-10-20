@@ -29,8 +29,15 @@ const messages = socketServer.of('messages');
 
 messages.on('connection', (socket) => {
   console.log('Client Connected', socket.id);
+  socket.join('lobby')
+
+  socket.on('join', (payload) => {
+    socket.join(payload.itemId);
+    console.log('client joining', payload.itemId)
+  })
 
     socket.on('itemForAuction', (payload) => {
+      socket.join(payload.itemId)
       console.log(payload);
       console.log(currentHighestBid)
       stopwatch1.seconds = payload.auctionTime;
@@ -38,8 +45,9 @@ messages.on('connection', (socket) => {
        stopwatch1.start(() => {
         messages.emit('endAuction', {highestBid: currentHighestBid})
         currentHighestBid = 0;
+        messages.in(payload.itemId).socketsJoin('lobby')
+        messages.socketsLeave(payload.itemId)
       });
-        
     })
     socket.on('bid', (payload) => {
       if(stopwatch1.status && payload.userBid > currentHighestBid){
@@ -50,5 +58,10 @@ messages.on('connection', (socket) => {
       } else if (payload.userBid < currentHighestBid){
         console.log('There is a higher bid')
       }
+    })
+    socket.on('joinRoom', (payload) => {
+      socket.leave('lobby')
+      socket.join(payload.itemId)
+      console.log('client joined ', payload.itemId, socket.rooms)
     })
 })
