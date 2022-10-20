@@ -14,24 +14,35 @@ const auctionTime =  10;
 
 
 socket.emit('itemForAuction', {
-    userId: 'Cognito id',
+    auctionId: chance.guid(),
     itemId: chance.guid(),
     item:'test item',
     itemDescription: 'Test item description',
     startTime: startTime,
     auctionTime: auctionTime,
-    intialBid: 'dollar amount',
+    currentBid: 'dollar amount',
+    userId: 'test'
 })
 
 let intialBid = 5;
+let iterationNumber = 0
 
-setInterval(() => {
+let checkInterval = () => {
+    if (iterationNumber > 1){
+        clearInterval(interval)
+    }
+}
+
+let  interval = setInterval(() => {
     intialBid += 2;
+    iterationNumber++;
         socket.emit('bid', {
             userBid: intialBid,
             userId: 'test'
         })
-    }, 7000)
+        socket.emit('leave-room', {})
+        checkInterval();
+    }, 10000)
 
     socket.on('endAuction', (payload) => {
         console.log(payload);

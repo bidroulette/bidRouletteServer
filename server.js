@@ -14,8 +14,9 @@ const PORT = process.env.PORT || 3002;
 //port in the module that controls the timings
 const Stopwatch = require('./modules/Stopwatch/index.js');
 let currentHighestBid = 0;
-
 const stopwatch1 = new Stopwatch();
+const Chance = require('chance');
+const chance = new Chance();
 
 const AWS = require('aws-sdk');
 
@@ -33,6 +34,7 @@ const socketServer = io(server, {
     methods: ["GET", "POST"],
   }
 })
+
 
 // gives server access to AWS-SDK via developers access key
 AWS.config.update({
@@ -52,6 +54,7 @@ console.log(lambda);
 // });
 
 
+
 server.listen(PORT);
 
 
@@ -60,41 +63,62 @@ const messages = socketServer.of('messages');
 
 messages.on('connection', (socket) => {
   console.log('Client Connected', socket.id);
-  const onEnd = () => {
-    socket.broadcast.emit('endAuction', { highestBid: currentHighestBid })
-  }
 
-  socket.on('itemForAuction', (payload) => {
-    console.log(payload);
-    var params = {
+  socket.join('lobby')
+
+  socket.on('join', (payload) => {
+    socket.join(payload.itemId);
+    console.log('client joining', payload.itemId)
+  });
+
+    socket.on('itemForAuction', (payload) => {
+         console.log(payload);
+    
+      var params = {
       FunctionName: 'postItem', /* required */
       InvocationType: 'Event', 
       Payload: JSON.stringify(payload),            
-    };
-    console.log('Params.Payload',typeof params.Payload);
-    lambda.invoke(params, function(err, data) {
-      if (err) console.log('Failure!', err, err.stack); // an error occurred
-      else     console.log('Success!', data);           // successful response
-    });
+          };
+        console.log('Params.Payload',typeof params.Payload);
+        lambda.invoke(params, function(err, data) {
+          if (err) console.log('Failure!', err, err.stack); // an error occurred
+          else     console.log('Success!', data);           // successful response
+        });
 
-
-    stopwatch1.seconds = payload.auctionTime;
-    socket.broadcast.emit('itemReady', (payload))
-    stopwatch1.start(() => {
-      messages.emit('endAuction', { highestBid: currentHighestBid })
-    });
-
-  })
-  socket.on('bid', (payload) => {
-    if (stopwatch1.status && payload.userBid > currentHighestBid) {
-      stopwatch1.addTime(payload.userBid, payload.userId);
-      currentHighestBid = payload.userBid;
+      socket.join(payload.itemId)
+      console.log(payload);
       console.log(currentHighestBid)
-    } else if (!stopwatch1.status) {
-            console.log('auction over')
-    } else if (payload.userBid < currentHighestBid) {
-      console.log('There is a higher bid')
-    }
+      stopwatch1.seconds = payload.auctionTime;
+       socket.broadcast.emit('itemReady', (payload))
+       stopwatch1.start(() => {
+        messages.emit('endAuction', {
+          auctionWinnerId: currentHighestBidder,
+          highestBid: currentHighestBid.currentHighestBid,
+          auctionId: payload.auctionId,
+          itemId: payload.itemId,
+        })
+        currentHighestBid = 0;
+        messages.in(payload.itemId).socketsJoin('lobby');
+        messages.socketsLeave(payload.itemId);
+      });
+    })
+    socket.on('bid', (payload) => {
+      if(stopwatch1.status && payload.userBid > currentHighestBid){
+        stopwatch1.addTime(payload.userBid, payload.userId);
+        currentHighestBid = {
+          currentHighestBid: payload.userBid,
+          currentHighestBidder: payload.userId};
 
-  })
+      } else if (!stopwatch1.status){
+        console.log('auction over')
+      } else if (payload.userBid < currentHighestBid){
+        console.log('There is a higher bid')
+      }
+    })
+    socket.on('joinRoom', (payload) => {
+      socket.leave('lobby')
+      socket.join(payload.itemId)
+      console.log('client joined ', payload.itemId, socket.rooms)
+    })
 })
+
