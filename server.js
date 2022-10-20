@@ -86,7 +86,7 @@ messages.on('connection', (socket) => {
        socket.broadcast.emit('itemReady', (payload))
        stopwatch1.start(() => {
         messages.emit('endAuction', {
-          auctionWinnerId: currentHighestBidder,
+          auctionWinnerId: currentHighestBid.currentHighestBidder,
           highestBid: currentHighestBid.currentHighestBid,
           auctionId: payload.auctionId,
           itemId: payload.itemId,
