@@ -33,7 +33,7 @@ messages.on('connection', (socket) => {
   socket.on('join', (payload) => {
     socket.join(payload.itemId);
     console.log('client joining', payload.itemId)
-  })
+  });
 
     socket.on('itemForAuction', (payload) => {
       socket.join(payload.itemId)

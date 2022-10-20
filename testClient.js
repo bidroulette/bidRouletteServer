@@ -10,15 +10,15 @@ const startTime = new Date();
 const auctionTime =  10;
 
 socket.emit('itemForAuction', {
-    userId: 'Cognito id',
+    auctionId: chance.guid(),
     itemId: chance.guid(),
     item:'test item',
     itemDescription: 'Test item description',
     startTime: startTime,
     auctionTime: auctionTime,
-    intialBid: 'dollar amount',
+    currentBid: 'dollar amount',
+    userId: 'test'
 })
-
 
 let intialBid = 5;
 let iterationNumber = 0
