@@ -3,7 +3,7 @@
 class Stopwatch {
    constructor() {
       this.status = false;
-      this.seconds = 10; // For testing purposes this is set to 10. Set this to 30 and delete this comment when site goes live!
+      this.seconds = null; // For testing purposes this is set to 10. Set this to 30 and delete this comment when site goes live!
       this.intervalId = undefined;
       this.onEnd = null;
    }

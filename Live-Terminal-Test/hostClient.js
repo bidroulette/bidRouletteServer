@@ -7,7 +7,7 @@ const chance = new Chance();
 const socket = io.connect("http://localhost:3002/messages")
 
 const startTime = new Date();
-const auctionTime =  10;
+const auctionTime =  20;
 
 socket.emit('itemForAuction', {
     auctionId: chance.guid(),
@@ -16,7 +16,7 @@ socket.emit('itemForAuction', {
     itemDescription: 'Test item description',
     startTime: startTime,
     auctionTime: auctionTime,
-    currentBid: 'dollar amount',
+    intialBid: 'dollar amount',
     userId: 'test'
 })
 
