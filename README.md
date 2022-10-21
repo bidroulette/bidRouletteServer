@@ -21,7 +21,7 @@ This is an early version of our UML: ![UML](/images/bidRouletteUML.PNG)
 We originally planned to build this application as a serverless service on AWS, and it may migrate to that architecture in the future. 
 
 Our final UML is closer to this hybrid UML
-![UML2](/images/UML2.)
+![UML2](/images/UML2.jpg)
 ## User Stories  
 
 ### Title: Security  
