@@ -45,13 +45,17 @@ AWS.config.update({
 
 // pulls a new lambda object from aws-sdk to give server access to this function
 
-const lambda = new AWS.Lambda();
+let lambda = new AWS.Lambda();
 console.log(lambda);
 // lambda.addLayerVersionPermission(params, function (err, data) {
 //   if (err) console.log(err, err.stack); // an error occurred
 //   else     console.log(data);           // successful response
 // });
 
+const invokeLambda = async (params) => {
+  const data = await lambda.invoke(params).promise();
+  return data;
+}
 
 server.listen(PORT);
 
@@ -66,7 +70,7 @@ messages.on('connection', (socket) => {
     console.log('client joining', payload.itemId)
   });
 
-  socket.on('itemForAuction', (payload) => {
+    socket.on('itemForAuction', async (payload) => {
     socket.join(payload.itemId)
     console.log(payload);
 
@@ -77,10 +81,13 @@ messages.on('connection', (socket) => {
       Payload: JSON.stringify(payload),
     };
     console.log('Params.Payload', typeof params.Payload);
-    lambda.invoke(params, function (err, data) {
-      if (err) console.log('Failure!', err, err.stack); // an error occurred
-      else console.log('Success!', data);           // successful response
-    });
+    //lambda.invoke(params, function (err, data) {
+    //   if (err) console.log('Failure!', err, err.stack); // an error occurred
+    //   else console.log('Success!', data);           // successful response
+    // });
+    
+    const result = await invokeLambda(params);
+    console.log(result);
 
     console.log(currentHighestBid)
     stopwatch1.seconds = payload.auctionTime;
