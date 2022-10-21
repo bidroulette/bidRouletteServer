@@ -13,10 +13,11 @@ const PORT = process.env.PORT || 3002;
 
 //port in the module that controls the timings
 const Stopwatch = require('./modules/Stopwatch/index.js');
-let currentHighestBid = 0;
+let currentHighestBid = {
+  currentHighestBid: 0,
+  userId: ''
+};
 const stopwatch1 = new Stopwatch();
-const Chance = require('chance');
-const chance = new Chance();
 
 const AWS = require('aws-sdk');
 
@@ -89,7 +90,7 @@ messages.on('connection', (socket) => {
     // start of auction - emit item for auction
     socket.broadcast.emit('itemReady', (payload))
     stopwatch1.start(() => {
-      
+
       // end of auction information
       let endAuctionItem = {
         auctionWinnerId: currentHighestBid.currentHighestBidder,
@@ -97,9 +98,9 @@ messages.on('connection', (socket) => {
         auctionId: payload.auctionId,
         itemId: payload.itemId,
       }
-      
+
       //end of auction 
-      messages.emit('endAuction', endAuctionItem )
+      messages.emit('endAuction', endAuctionItem)
 
       var params = {
         FunctionName: 'postWinningBid', /* required */
@@ -122,7 +123,7 @@ messages.on('connection', (socket) => {
   socket.on('bid', (payload) => {
 
     //checks to see if auction has time and bid is higher than current bid
-    if (stopwatch1.status && payload.userBid > currentHighestBid) {
+    if (stopwatch1.status && payload.userBid > currentHighestBid.currentHighestBid) {
 
       //adds 5 secs if a bid is accepted
       stopwatch1.addTime(payload.userBid, payload.userId);
@@ -130,6 +131,7 @@ messages.on('connection', (socket) => {
         currentHighestBid: payload.userBid,
         currentHighestBidder: payload.userId
       };
+      socket.broadcast.emit('bid', currentHighestBid)
 
     } else if (!stopwatch1.status) {
       console.log('auction over')
